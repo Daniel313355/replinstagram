@@ -1,65 +1,52 @@
+// src/UploadPost.jsx
 import React, { useState } from "react";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "./firebase";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 
-export default function UploadPost() {
-  const [file, setFile] = useState(null);
+export default function UploadPost({ user }) {
   const [caption, setCaption] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [file, setFile] = useState(null);
 
-  const handleFileChange = (e) => {
-    const selected = e.target.files[0];
-    if (selected && (selected.type.includes("image") || selected.type.includes("video"))) {
-      setFile(selected);
-      setError(null);
-    } else {
-      setError("Formato no soportado");
-      setFile(null);
-    }
-  };
-
-  const handleUpload = () => {
+  const handleUpload = async () => {
     if (!file) {
-      setError("Selecciona un archivo");
+      alert("Por favor selecciona una imagen o video.");
       return;
     }
-    setLoading(true);
+
     const reader = new FileReader();
     reader.onloadend = async () => {
       try {
         await addDoc(collection(db, "posts"), {
-          caption,
+          caption: caption,
           mediaBase64: reader.result,
+          userEmail: user.email, // Guarda el email del usuario autenticado
           likes: 0,
           createdAt: serverTimestamp(),
         });
+
         setCaption("");
         setFile(null);
-        setError(null);
-      } catch (e) {
-        setError("Error subiendo el post");
-        console.error(e);
-      } finally {
-        setLoading(false);
+        alert("¡Publicación subida!");
+      } catch (error) {
+        console.error("Error al subir el post:", error);
+        alert("Hubo un error al subir el post.");
       }
     };
+
     reader.readAsDataURL(file);
   };
 
   return (
     <div className="upload-post">
-      <input type="file" onChange={handleFileChange} />
+      <h3>Subir nueva publicación</h3>
+      <input type="file" onChange={(e) => setFile(e.target.files[0])} />
       <input
         type="text"
-        placeholder="Escribe un caption"
+        placeholder="Escribe un pie de foto..."
         value={caption}
         onChange={(e) => setCaption(e.target.value)}
       />
-      <button onClick={handleUpload} disabled={loading}>
-        {loading ? "Subiendo..." : "Subir Post"}
-      </button>
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      <button onClick={handleUpload}>Subir</button>
     </div>
   );
 }

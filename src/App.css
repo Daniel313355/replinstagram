@@ -7,11 +7,11 @@
 
 /* App container */
 .App {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
   max-width: 600px;
   margin: 0 auto;
   padding: 1rem;
-  background-color: #fafafa;
+  background-color: #000000;
   min-height: 100vh;
 }
 
@@ -20,12 +20,12 @@
   text-align: center;
   font-size: 2rem;
   margin-bottom: 1.5rem;
-  color: #262626;
+  color: #ffffff;
 }
 
 /* Upload post section */
 .upload-post {
-  background: #fff;
+  background: #ffffff;
   border: 1px solid #dbdbdb;
   padding: 1rem;
   border-radius: 8px;
@@ -47,7 +47,7 @@
 .upload-post button {
   padding: 0.6rem 1rem;
   border: none;
-  background-color: #0095f6;
+  background-color: #000000;
   color: white;
   border-radius: 4px;
   cursor: pointer;
